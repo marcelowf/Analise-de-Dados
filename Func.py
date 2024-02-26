@@ -1,17 +1,7 @@
-import csv
 import math
 import matplotlib.pyplot as plt
 
-def plotar_tabela_distribuicao_frequencias(intervalos, ponto_medio, frequencia_acumulada, amplitude_classes):
-    plt.figure(figsize=(10, 6))
-    plt.bar(ponto_medio, frequencia_acumulada, width = amplitude_classes, align='center', alpha=0.7)
-    plt.xlabel('Intervalo')
-    plt.ylabel('Frequência Acumulada')
-    plt.title('Tabela de Distribuição de Frequências')
-    plt.xticks(ponto_medio)
-    plt.grid(True)
-    plt.show()
-
+# Passo 1: Organizar
 def ordenar_shell_sort(vetor):
     tamanho = len(vetor)
     intervalo = tamanho // 2
@@ -28,74 +18,98 @@ def ordenar_shell_sort(vetor):
 
     return vetor
 
-def parse_para_double(valor):
-    try:
-        return float(valor)
-    except ValueError:
-        return None
-
+# Passo 2: Calcular a amplitude
 def descobrir_amplitude(vetor):
     resultado = vetor[-1] - vetor[0]
     return resultado
 
+# Passo 3: Calcular a quantidade de classes
 def calcular_quantidade_classes(vetor):
     tamanho = len(vetor)
     resultado = 1 + 3.3 * math.log10(tamanho)
     return math.ceil(resultado)
 
+# Passo 4: Calcular a amplitude de cada classe
 def calcular_amplitude_classes(amplitude, quantidade):
     resultado = amplitude / quantidade
     return math.ceil(resultado)
 
-def tabela_distribuicao_frequencias(vetor):
-    vetor_ordenado = ordenar_shell_sort(vetor)
-    amplitude_total = descobrir_amplitude(vetor_ordenado)
-    quantidade_classes = calcular_quantidade_classes(vetor_ordenado)
-    amplitude_classes = calcular_amplitude_classes(amplitude_total, quantidade_classes)
-
-    # Cria uma lista de intervalos e calcula o ponto médio de cada intervalo
+# Passo 5: Calcular intervalos
+def calcular_intervalos(vetor_ordenado, quantidade_classes, amplitude_classes):
     intervalos = []
-    ponto_medio = []
     limite_inferior = min(vetor_ordenado)
     for _ in range(quantidade_classes):
         limite_superior = limite_inferior + amplitude_classes
         intervalos.append((limite_inferior, limite_superior))
-        ponto_medio.append((limite_inferior + limite_superior) / 2)  # Calcula o ponto médio
         limite_inferior = limite_superior
+    return intervalos
 
-    # Calcula a frequência e frequência acumulada
-    frequencia = [0] * quantidade_classes
-    frequencia_acumulada = [0] * quantidade_classes
-    total_observacoes = len(vetor_ordenado)
+# Passo 5: Calcular a frequencia
+def calcular_frequencia(vetor_ordenado, intervalos):
+    frequencia = [0] * len(intervalos)
     acumulador = 0
     for i, valor in enumerate(vetor_ordenado):
         for j, (limite_inferior, limite_superior) in enumerate(intervalos):
             if limite_inferior <= valor < limite_superior:
                 frequencia[j] += 1
                 acumulador += 1
-                frequencia_acumulada[j] = acumulador
                 break
+    return frequencia
+
+# Passo 6: Calcular o ponto_médio
+def calcular_ponto_medio(intervalos):
+    ponto_medio = []
+    for limite_inferior, limite_superior in intervalos:
+        ponto_medio.append((limite_inferior + limite_superior) / 2)
+    return ponto_medio
+
+
+# Passo 7: Calcular a frequencia acumulada
+def calcular_frequencia_acumulada(frequencia):
+    return [sum(frequencia[:i+1]) for i in range(len(frequencia))]
+
+# Passo 8: Plotar a tabela
+def calcular_frequencia_acumulada(frequencia):
+    return [sum(frequencia[:i+1]) for i in range(len(frequencia))]
+def plotar_tabela_distribuicao_frequencias(intervalos, ponto_medio, frequencia, frequencia_acumulada, nome):
+    plt.figure(figsize=(8, 6))
+    plt.axis('off')  # Desabilita os eixos
+    colLabels = ['Intervalo', 'Ponto Médio', 'Frequência', 'Frequência Acumulada']
+    tabela = plt.table(cellText=list(zip(intervalos, ponto_medio, frequencia, frequencia_acumulada)), colLabels=colLabels, loc='center')
+    tabela.auto_set_font_size(False)
+    tabela.set_fontsize(10)
+    tabela.scale(1.2, 1.2)
+    plt.title(nome)
+    plt.show()
+
+# Controller de processos
+def tabela_distribuicao_frequencias(vetor, nome):
+
+    vetor_ordenado = ordenar_shell_sort(vetor)
+
+
+    amplitude_total = descobrir_amplitude(vetor_ordenado)
+
+
+    quantidade_classes = calcular_quantidade_classes(vetor_ordenado)
+
+
+    amplitude_classes = calcular_amplitude_classes(amplitude_total, quantidade_classes)
+
+
+    intervalos = calcular_intervalos(vetor_ordenado, quantidade_classes, amplitude_classes)
+
     
-    return plotar_tabela_distribuicao_frequencias(intervalos, ponto_medio, frequencia_acumulada, amplitude_classes)
+    ponto_medio = calcular_ponto_medio(intervalos)
 
-# Carrega os dados do arquivo CSV
-marca, modelo, distancia_entre_eixos, altura, peso_total_padrao, tamanho_motor, potencia_motor, rotacoes_maximas_minuto, eficiencia_combustivel_cidade, eficiencia_combustivel_rodovia, preco = ([] for _ in range(11))
 
-with open('Dados.csv', 'r') as f:
-    reader = csv.reader(f)
-    next(reader)
-    
-    for i, row in enumerate(reader):
-        marca.append(row[2])
-        modelo.append(row[5])
-        distancia_entre_eixos.append(parse_para_double(row[8]))
-        altura.append(parse_para_double(row[11]))
-        peso_total_padrao.append(parse_para_double(row[12]))
-        tamanho_motor.append(parse_para_double(row[15]))
-        potencia_motor.append(parse_para_double(row[20]))
-        rotacoes_maximas_minuto.append(parse_para_double(row[21]))
-        eficiencia_combustivel_cidade.append(parse_para_double(row[22]))
-        eficiencia_combustivel_rodovia.append(parse_para_double(row[23]))
-        preco.append(parse_para_double(row[24]))
+    frequencia = calcular_frequencia(vetor_ordenado, intervalos)
 
-tabela_distribuicao_frequencias(altura)
+
+    frequencia_acumulada = calcular_frequencia_acumulada(frequencia)
+
+
+    plotar_tabela_distribuicao_frequencias(intervalos, ponto_medio, frequencia, frequencia_acumulada, nome)
+
+    return
+
