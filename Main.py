@@ -36,19 +36,9 @@ def calcular_amplitude_classes(amplitude, quantidade):
     resultado = amplitude / quantidade
     return math.ceil(resultado)
 
-"""def tabela_distribuicao_frequencias(vetor):
-    vetor_ordenado = ordenar_shell_sort(vetor)
-    # é preciso arredondar o vetor?
-    amplitude_total = descobrir_amplitude(vetor_ordenado)
-    quantidade_classes = calcular_quantidade_classes(vetor_ordenado)
-    amplitude_calsses = calcular_amplitude_classes(amplitude_total, quantidade_classes)
-
-    # print("Amplitude: " + str(amplitude_total) + "\nQuantidade de classes: " + str(quantidade_classes) + "\nAmplitude das calsses: " + str(amplitude_calsses))
-    
-    return vetor_ordenado"""
-
 def tabela_distribuicao_frequencias(vetor):
     vetor_ordenado = ordenar_shell_sort(vetor)
+    # Devo arredondar o vetor?
     amplitude_total = descobrir_amplitude(vetor_ordenado)
     quantidade_classes = calcular_quantidade_classes(vetor_ordenado)
     amplitude_classes = calcular_amplitude_classes(amplitude_total, quantidade_classes)
