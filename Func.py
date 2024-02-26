@@ -63,14 +63,11 @@ def calcular_ponto_medio(intervalos):
         ponto_medio.append((limite_inferior + limite_superior) / 2)
     return ponto_medio
 
-
 # Passo 7: Calcular a frequencia acumulada
 def calcular_frequencia_acumulada(frequencia):
     return [sum(frequencia[:i+1]) for i in range(len(frequencia))]
 
 # Passo 8: Plotar a tabela
-def calcular_frequencia_acumulada(frequencia):
-    return [sum(frequencia[:i+1]) for i in range(len(frequencia))]
 def plotar_tabela_distribuicao_frequencias(intervalos, ponto_medio, frequencia, frequencia_acumulada, nome):
     plt.figure(figsize=(8, 6))
     plt.axis('off')  # Desabilita os eixos
@@ -84,32 +81,18 @@ def plotar_tabela_distribuicao_frequencias(intervalos, ponto_medio, frequencia, 
 
 # Controller de processos
 def tabela_distribuicao_frequencias(vetor, nome):
-
     vetor_ordenado = ordenar_shell_sort(vetor)
 
-
     amplitude_total = descobrir_amplitude(vetor_ordenado)
-
-
     quantidade_classes = calcular_quantidade_classes(vetor_ordenado)
-
-
     amplitude_classes = calcular_amplitude_classes(amplitude_total, quantidade_classes)
-
 
     intervalos = calcular_intervalos(vetor_ordenado, quantidade_classes, amplitude_classes)
 
-    
     ponto_medio = calcular_ponto_medio(intervalos)
-
-
     frequencia = calcular_frequencia(vetor_ordenado, intervalos)
-
-
     frequencia_acumulada = calcular_frequencia_acumulada(frequencia)
-
 
     plotar_tabela_distribuicao_frequencias(intervalos, ponto_medio, frequencia, frequencia_acumulada, nome)
 
     return
-

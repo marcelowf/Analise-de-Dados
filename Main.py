@@ -7,6 +7,7 @@ def parse_para_double(valor):
     except ValueError:
         return None
 
+# Campos escolhidos
 marca, modelo, distancia_entre_eixos, altura, peso_total_padrao, tamanho_motor, potencia_motor, rotacoes_maximas_minuto, eficiencia_combustivel_cidade, eficiencia_combustivel_rodovia, preco = ([] for _ in range(11))
 
 with open('Dados.csv', 'r') as f:
