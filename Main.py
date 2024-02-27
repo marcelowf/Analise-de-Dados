@@ -7,32 +7,56 @@ def parse_para_double(valor):
     except ValueError:
         return None
 
-# Campos escolhidos
-marca, modelo, distancia_entre_eixos, altura, peso_total_padrao, tamanho_motor, potencia_motor, rotacoes_maximas_minuto, eficiencia_combustivel_cidade, eficiencia_combustivel_rodovia, preco = ([] for _ in range(11))
+def exibir_tabela_distribuicao_frequencia(opcao, dados):
+    opcoes = {
+        1: "Tabela da Distância entre Eixos",
+        2: "Tabela da Altura",
+        3: "Tabela do Peso Padrão",
+        4: "Tabela do Tamanho do Motor",
+        5: "Tabela da Potência do Motor",
+        6: "Tabela de Rotação Máxima por Minuto",
+        7: "Tabela de Eficiência na Cidade",
+        8: "Tabela de Eficiência na Rodovia",
+        9: "Tabela de Preço"
+    }
+    if opcao in opcoes:
+        Func.tabela_distribuicao_frequencias(dados[opcao - 1], opcoes[opcao])
+    elif opcao == 10:
+        print("Saindo do programa...")
+        exit()
+    else:
+        print("Opção inválida. Por favor, escolha uma opção válida.")
+
+dados = [[] for _ in range(9)]
 
 with open('Dados.csv', 'r') as f:
     reader = csv.reader(f)
     next(reader)
     
-    for i, row in enumerate(reader):
-        marca.append(row[2])
-        modelo.append(row[5])
-        distancia_entre_eixos.append(parse_para_double(row[8]))
-        altura.append(parse_para_double(row[11]))
-        peso_total_padrao.append(parse_para_double(row[12]))
-        tamanho_motor.append(parse_para_double(row[15]))
-        potencia_motor.append(parse_para_double(row[20]))
-        rotacoes_maximas_minuto.append(parse_para_double(row[21]))
-        eficiencia_combustivel_cidade.append(parse_para_double(row[22]))
-        eficiencia_combustivel_rodovia.append(parse_para_double(row[23]))
-        preco.append(parse_para_double(row[24]))
+    for row in reader:
+        dados[0].append(parse_para_double(row[8]))
+        dados[1].append(parse_para_double(row[11]))
+        dados[2].append(parse_para_double(row[12]))
+        dados[3].append(parse_para_double(row[15]))
+        dados[4].append(parse_para_double(row[20]))
+        dados[5].append(parse_para_double(row[21]))
+        dados[6].append(parse_para_double(row[22]))
+        dados[7].append(parse_para_double(row[23]))
+        dados[8].append(parse_para_double(row[24]))
 
-Func.tabela_distribuicao_frequencias(distancia_entre_eixos, "Tabela da Distância entre Eixos")
-Func.tabela_distribuicao_frequencias(altura, "Tabela da Altura")
-Func.tabela_distribuicao_frequencias(peso_total_padrao, "Tabela do Peso Padrão")
-Func.tabela_distribuicao_frequencias(tamanho_motor, "Tabela do Tamanho do Motor")
-Func.tabela_distribuicao_frequencias(potencia_motor, "Tabela da Potência do Motor")
-Func.tabela_distribuicao_frequencias(rotacoes_maximas_minuto, "Tabela de Rotação Máxima por Minuto")
-Func.tabela_distribuicao_frequencias(eficiencia_combustivel_cidade, "Tabela de Eficiência na Cidade")
-Func.tabela_distribuicao_frequencias(eficiencia_combustivel_rodovia, "Tabela de Eficiência na Rodovia")
-Func.tabela_distribuicao_frequencias(preco, "Tabela de Preço")
+while True:
+    print("\nEscolha a tabela de distribuição de frequência que deseja visualizar:")
+    print("1. Tabela da Distância entre Eixos")
+    print("2. Tabela da Altura")
+    print("3. Tabela do Peso Padrão")
+    print("4. Tabela do Tamanho do Motor")
+    print("5. Tabela da Potência do Motor")
+    print("6. Tabela de Rotação Máxima por Minuto")
+    print("7. Tabela de Eficiência na Cidade")
+    print("8. Tabela de Eficiência na Rodovia")
+    print("9. Tabela de Preço")
+    print("10. Sair")
+
+    opcao = int(input("Digite o número correspondente à opção desejada: "))
+
+    exibir_tabela_distribuicao_frequencia(opcao, dados)
